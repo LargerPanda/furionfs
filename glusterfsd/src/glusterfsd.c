@@ -2590,7 +2590,7 @@ int
 main(int argc, char *argv[])
 {
 
-        printf("hello world!\n");
+        printf("hello world!hahhaaahhaha\n");
 //     glusterfs_ctx_t *ctx = NULL;
 //     int ret = -1;
 //     char cmdlinestr[PATH_MAX] = {
