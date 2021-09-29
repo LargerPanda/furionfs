@@ -2589,156 +2589,158 @@ glusterfs_ctx_t *glusterfsd_ctx;
 int
 main(int argc, char *argv[])
 {
-    glusterfs_ctx_t *ctx = NULL;
-    int ret = -1;
-    char cmdlinestr[PATH_MAX] = {
-        0,
-    };
-    cmd_args_t *cmd = NULL;
 
-    gf_check_and_set_mem_acct(argc, argv);
+        printf("hello world!\n");
+//     glusterfs_ctx_t *ctx = NULL;
+//     int ret = -1;
+//     char cmdlinestr[PATH_MAX] = {
+//         0,
+//     };
+//     cmd_args_t *cmd = NULL;
 
-    ctx = glusterfs_ctx_new();
-    if (!ctx) {
-        gf_smsg("glusterfs", GF_LOG_CRITICAL, 0, glusterfsd_msg_29, NULL);
-        return ENOMEM;
-    }
-    glusterfsd_ctx = ctx;
+//     gf_check_and_set_mem_acct(argc, argv);
 
-    ret = glusterfs_globals_init(ctx);
-    if (ret)
-        return ret;
+//     ctx = glusterfs_ctx_new();
+//     if (!ctx) {
+//         gf_smsg("glusterfs", GF_LOG_CRITICAL, 0, glusterfsd_msg_29, NULL);
+//         return ENOMEM;
+//     }
+//     glusterfsd_ctx = ctx;
 
-    THIS->ctx = ctx;
+//     ret = glusterfs_globals_init(ctx);
+//     if (ret)
+//         return ret;
 
-    ret = glusterfs_ctx_defaults_init(ctx);
-    if (ret)
-        goto out;
+//     THIS->ctx = ctx;
 
-    ret = parse_cmdline(argc, argv, ctx);
-    if (ret)
-        goto out;
-    cmd = &ctx->cmd_args;
+//     ret = glusterfs_ctx_defaults_init(ctx);
+//     if (ret)
+//         goto out;
 
-    if (cmd->print_xlatordir) {
-        /* XLATORDIR passed through a -D flag to GCC */
-        printf("%s\n", XLATORDIR);
-        goto out;
-    }
+//     ret = parse_cmdline(argc, argv, ctx);
+//     if (ret)
+//         goto out;
+//     cmd = &ctx->cmd_args;
 
-    if (cmd->print_statedumpdir) {
-        printf("%s\n", DEFAULT_VAR_RUN_DIRECTORY);
-        goto out;
-    }
+//     if (cmd->print_xlatordir) {
+//         /* XLATORDIR passed through a -D flag to GCC */
+//         printf("%s\n", XLATORDIR);
+//         goto out;
+//     }
 
-    if (cmd->print_logdir) {
-        printf("%s\n", DEFAULT_LOG_FILE_DIRECTORY);
-        goto out;
-    }
+//     if (cmd->print_statedumpdir) {
+//         printf("%s\n", DEFAULT_VAR_RUN_DIRECTORY);
+//         goto out;
+//     }
 
-    if (cmd->print_libexecdir) {
-        printf("%s\n", LIBEXECDIR);
-        goto out;
-    }
+//     if (cmd->print_logdir) {
+//         printf("%s\n", DEFAULT_LOG_FILE_DIRECTORY);
+//         goto out;
+//     }
 
-    if (cmd->print_netgroups) {
-        /* If this option is set we want to print & verify the file,
-         * set the return value (exit code in this case) and exit.
-         */
-        ret = print_netgroups_file(cmd->print_netgroups);
-        goto out;
-    }
+//     if (cmd->print_libexecdir) {
+//         printf("%s\n", LIBEXECDIR);
+//         goto out;
+//     }
 
-    if (cmd->print_exports) {
-        /* If this option is set we want to print & verify the file,
-         * set the return value (exit code in this case)
-         * and exit.
-         */
-        ret = print_exports_file(cmd->print_exports);
-        goto out;
-    }
+//     if (cmd->print_netgroups) {
+//         /* If this option is set we want to print & verify the file,
+//          * set the return value (exit code in this case) and exit.
+//          */
+//         ret = print_netgroups_file(cmd->print_netgroups);
+//         goto out;
+//     }
 
-    ret = logging_init(ctx, argv[0]);
-    if (ret)
-        goto out;
+//     if (cmd->print_exports) {
+//         /* If this option is set we want to print & verify the file,
+//          * set the return value (exit code in this case)
+//          * and exit.
+//          */
+//         ret = print_exports_file(cmd->print_exports);
+//         goto out;
+//     }
 
-    /* set brick_mux mode only for server process */
-    if ((ctx->process_mode != GF_SERVER_PROCESS) && cmd->brick_mux) {
-        gf_smsg("glusterfs", GF_LOG_CRITICAL, 0, glusterfsd_msg_43, NULL);
-        goto out;
-    }
+//     ret = logging_init(ctx, argv[0]);
+//     if (ret)
+//         goto out;
 
-    /* log the version of glusterfs running here along with the actual
-       command line options. */
-    {
-        int i = 0;
-        int pos = 0;
-        int len = snprintf(cmdlinestr, sizeof(cmdlinestr), "%s", argv[0]);
-        for (i = 1; (i < argc) && (len > 0); i++) {
-            pos += len;
-            len = snprintf(cmdlinestr + pos, sizeof(cmdlinestr) - pos, " %s",
-                           argv[i]);
-            if ((len <= 0) || (len >= (sizeof(cmdlinestr) - pos))) {
-                gf_smsg("glusterfs", GF_LOG_ERROR, 0, glusterfsd_msg_029, NULL);
-                ret = -1;
-                goto out;
-            }
-        }
-        gf_smsg(argv[0], GF_LOG_INFO, 0, glusterfsd_msg_30, "arg=%s", argv[0],
-                "version=%s", PACKAGE_VERSION, "cmdlinestr=%s", cmdlinestr,
-                NULL);
+//     /* set brick_mux mode only for server process */
+//     if ((ctx->process_mode != GF_SERVER_PROCESS) && cmd->brick_mux) {
+//         gf_smsg("glusterfs", GF_LOG_CRITICAL, 0, glusterfsd_msg_43, NULL);
+//         goto out;
+//     }
 
-        ctx->cmdlinestr = gf_strdup(cmdlinestr);
-    }
+//     /* log the version of glusterfs running here along with the actual
+//        command line options. */
+//     {
+//         int i = 0;
+//         int pos = 0;
+//         int len = snprintf(cmdlinestr, sizeof(cmdlinestr), "%s", argv[0]);
+//         for (i = 1; (i < argc) && (len > 0); i++) {
+//             pos += len;
+//             len = snprintf(cmdlinestr + pos, sizeof(cmdlinestr) - pos, " %s",
+//                            argv[i]);
+//             if ((len <= 0) || (len >= (sizeof(cmdlinestr) - pos))) {
+//                 gf_smsg("glusterfs", GF_LOG_ERROR, 0, glusterfsd_msg_029, NULL);
+//                 ret = -1;
+//                 goto out;
+//             }
+//         }
+//         gf_smsg(argv[0], GF_LOG_INFO, 0, glusterfsd_msg_30, "arg=%s", argv[0],
+//                 "version=%s", PACKAGE_VERSION, "cmdlinestr=%s", cmdlinestr,
+//                 NULL);
 
-    gf_proc_dump_init();
+//         ctx->cmdlinestr = gf_strdup(cmdlinestr);
+//     }
 
-    ret = create_fuse_mount(ctx);
-    if (ret)
-        goto out;
+//     gf_proc_dump_init();
 
-    ret = daemonize(ctx);
-    if (ret)
-        goto out;
+//     ret = create_fuse_mount(ctx);
+//     if (ret)
+//         goto out;
 
-    /*
-     * If we do this before daemonize, the pool-sweeper thread dies with
-     * the parent, but we want to do it as soon as possible after that in
-     * case something else depends on pool allocations.
-     */
-    mem_pools_init();
+//     ret = daemonize(ctx);
+//     if (ret)
+//         goto out;
 
-    ret = gf_async_init(ctx);
-    if (ret < 0) {
-        goto out;
-    }
+//     /*
+//      * If we do this before daemonize, the pool-sweeper thread dies with
+//      * the parent, but we want to do it as soon as possible after that in
+//      * case something else depends on pool allocations.
+//      */
+//     mem_pools_init();
 
-#ifdef GF_LINUX_HOST_OS
-    ret = set_oom_score_adj(ctx);
-    if (ret)
-        goto out;
-#endif
+//     ret = gf_async_init(ctx);
+//     if (ret < 0) {
+//         goto out;
+//     }
 
-    ctx->env = syncenv_new(0, 0, 0);
-    if (!ctx->env) {
-        gf_smsg("", GF_LOG_ERROR, 0, glusterfsd_msg_31, NULL);
-        goto out;
-    }
+// #ifdef GF_LINUX_HOST_OS
+//     ret = set_oom_score_adj(ctx);
+//     if (ret)
+//         goto out;
+// #endif
 
-    /* do this _after_ daemonize() */
-    if (!glusterfs_ctx_tw_get(ctx)) {
-        ret = -1;
-        goto out;
-    }
+//     ctx->env = syncenv_new(0, 0, 0);
+//     if (!ctx->env) {
+//         gf_smsg("", GF_LOG_ERROR, 0, glusterfsd_msg_31, NULL);
+//         goto out;
+//     }
 
-    ret = glusterfs_volumes_init(ctx);
-    if (ret)
-        goto out;
+//     /* do this _after_ daemonize() */
+//     if (!glusterfs_ctx_tw_get(ctx)) {
+//         ret = -1;
+//         goto out;
+//     }
 
-    ret = gf_event_dispatch(ctx->event_pool);
+//     ret = glusterfs_volumes_init(ctx);
+//     if (ret)
+//         goto out;
 
-out:
-    //    glusterfs_ctx_destroy (ctx);
-    gf_async_fini();
-    return ret;
+//     ret = gf_event_dispatch(ctx->event_pool);
+
+// out:
+//     //    glusterfs_ctx_destroy (ctx);
+//     gf_async_fini();
+//     return ret;
 }
