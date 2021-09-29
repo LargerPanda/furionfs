@@ -24,6 +24,14 @@ typedef struct _call_stub {
     uint32_t jnl_meta_len;
     uint32_t jnl_data_len;
     void (*serialize)(struct _call_stub *, char *, char *);
+
+    //qos-hys
+    struct timeval rTag; //预留tag
+    struct timeval pTag; //比例tag
+    struct timeval lTag; //上限tag
+    int app_index; //标识哪个app
+
+
     union {
         fop_lookup_t lookup;
         fop_stat_t stat;
