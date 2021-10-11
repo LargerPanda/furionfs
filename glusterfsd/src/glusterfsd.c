@@ -81,6 +81,7 @@
 #include <glusterfs/daemon.h>
 
 //QoS-hys
+#include "heap.h"
 
 
 /* using argp for command line parsing */
@@ -2608,9 +2609,48 @@ out:
     return new;
 }
 
+//在这个函数里面定义app_info
+app_info_t* new_app_info(){
+    //分配空间
+    app_info_t* new = NULL;
+    new = calloc(1,sizeof(*new));
+
+    /*******在这初始化几个应用，带宽是多少**********/
+    //app0
+    new->app_r[0] = 20;
+    new->app_p[0] = 40;
+    new->app_l[0] = 80;
+    //app1
+    new->app_r[1] = 20;
+    new->app_p[1] = 40;
+    new->app_l[1] = 80;
+    // //app2
+    // new->app_r[2] = 20;
+    // new->app_b[2] = 40;
+    // new->app_l[2] = 80;
+    // //app3
+    // new->app_r[3] = 20;
+    // new->app_b[3] = 40;
+    // new->app_l[3] = 80;
+    /*******在这初始化时间戳**********/
+    //app0
+    gettimeofday(&(new->last_r_of_app[0]), NULL);
+    gettimeofday(&(new->last_p_of_app[0]), NULL);
+    gettimeofday(&(new->last_l_of_app[0]), NULL);
+    //app1
+    gettimeofday(&(new->last_r_of_app[1]), NULL);
+    gettimeofday(&(new->last_p_of_app[1]), NULL);
+    gettimeofday(&(new->last_l_of_app[1]), NULL);
+    /*******在这初始化时间戳**********/
+    return new;
+}
+
 int
 main(int argc, char *argv[])
 {
+    //先生成app_info，指定app的rpl标签，并且初始化时间戳
+    app_info_t *global_app_info = new_app_info();
+
 
     call_stub_t *new_stub = my_stub_new();
 
