@@ -29,10 +29,11 @@ typedef struct _call_stub {
     struct timeval rTag; //预留tag
     struct timeval pTag; //比例tag
     struct timeval lTag; //上限tag
-    int app_index; //标识哪个app
+    int app_index; //标识属于哪个app
     int position_r; //在rplheap中的位置
     int position_p;
     int position_l;
+    //qos-hys
 
     union {
         fop_lookup_t lookup;

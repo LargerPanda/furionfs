@@ -2609,6 +2609,34 @@ out:
     return new;
 }
 
+//this is the function for creating new io_request
+static call_stub_t *
+new_io_request(int app_index, app_info_t* app_info)
+{
+    call_stub_t *new = NULL;
+
+    glusterfs_fop_t new_fop = GF_FOP_WRITE;
+
+    new = calloc(1, sizeof(*new));
+
+    new->frame = NULL;
+    new->wind = "a";
+    new->fop = new_fop;
+    new->stub_mem_pool = NULL;
+
+    //init QoS info
+    new->app_index = app_index;
+    //这个地方要根据全局的app_info来计算新的标签
+    gettimeofday(&new->rtag, NULL);
+	gettimeofday(&new->ptag, NULL);
+    gettimeofday(&new->ltag, NULL);
+
+    INIT_LIST_HEAD(&new->list);
+    INIT_LIST_HEAD(&new->args_cbk.entries);
+out:
+    return new;
+}
+
 //在这个函数里面定义app_info
 app_info_t* new_app_info(){
     //分配空间
