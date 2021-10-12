@@ -2609,6 +2609,8 @@ out:
     return new;
 }
 
+#define REQUEST_SIZE (1.0) //默认请求大小为1MB
+
 //this is the function for creating new io_request
 static call_stub_t *
 new_io_request(int app_index, app_info_t* app_info)
@@ -2617,7 +2619,7 @@ new_io_request(int app_index, app_info_t* app_info)
 
     glusterfs_fop_t new_fop = GF_FOP_WRITE;
 
-    new = calloc(1, sizeof(*new));
+    new = (call_stub_t *)calloc(1, sizeof(*new));
 
     new->frame = NULL;
     new->wind = "a";
@@ -2627,9 +2629,19 @@ new_io_request(int app_index, app_info_t* app_info)
     //init QoS info
     new->app_index = app_index;
     //这个地方要根据全局的app_info来计算新的标签
-    gettimeofday(&new->rtag, NULL);
-	gettimeofday(&new->ptag, NULL);
-    gettimeofday(&new->ltag, NULL);
+    //先计算出增量,单位需要转换usec
+    int r_delta = (int)(REQUEST_SIZE/app_info->app_r[app_index]*1000000);
+    int p_delta = (int)(REQUEST_SIZE/app_info->app_p[app_index]*1000000);
+    int l_delta = (int)(REQUEST_SIZE/app_info->app_l[app_index]*1000000);
+    //对tag进行赋值，超过1000000usec进位
+    new->rtag.tv_sec = app_info->last_r_of_app[app_index].tv_sec+r_delta/1000000;
+    new->rtag.tv_usec = app_info->last_r_of_app[app_index].tv_usec+r_delta%1000000;
+
+    new->ptag.tv_sec = app_info->last_p_of_app[app_index].tv_sec+p_delta/1000000;
+    new->ptag.tv_usec = app_info->last_p_of_app[app_index].tv_usec+p_delta%1000000;
+
+    new->ltag.tv_sec = app_info->last_l_of_app[app_index].tv_sec+l_delta/1000000;
+    new->ltag.tv_usec = app_info->last_l_of_app[app_index].tv_usec+l_delta%1000000;
 
     INIT_LIST_HEAD(&new->list);
     INIT_LIST_HEAD(&new->args_cbk.entries);
@@ -2641,9 +2653,10 @@ out:
 app_info_t* new_app_info(){
     //分配空间
     app_info_t* new = NULL;
-    new = calloc(1,sizeof(*new));
+    new = (app_info_t*)calloc(1,sizeof(*new));
 
     /*******在这初始化几个应用，带宽是多少**********/
+    //单位为MB/s
     //app0
     new->app_r[0] = 20;
     new->app_p[0] = 40;
@@ -2678,9 +2691,8 @@ main(int argc, char *argv[])
 {
     //先生成app_info，指定app的rpl标签，并且初始化时间戳
     app_info_t *global_app_info = new_app_info();
-
-
-    call_stub_t *new_stub = my_stub_new();
+    
+    call_stub_t *new_stub = new_io_request();
 
     if(new_stub!=NULL){
         printf("create stub success!");
