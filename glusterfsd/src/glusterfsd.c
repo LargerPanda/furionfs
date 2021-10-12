@@ -2691,12 +2691,18 @@ main(int argc, char *argv[])
 {
     //先生成app_info，指定app的rpl标签，并且初始化时间戳
     app_info_t *global_app_info = new_app_info();
-    
-    call_stub_t *new_stub = new_io_request();
 
+    call_stub_t *new_stub = new_io_request();
     if(new_stub!=NULL){
         printf("create stub success!");
     }else{
         printf("fail!");
     }
+
+
+    heap_t r_heap;
+    heap_t r_heap;
+
+    for(int i=0;i<1000;)
+  
 }
