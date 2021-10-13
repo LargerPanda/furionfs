@@ -2717,15 +2717,15 @@ main(int argc, char *argv[])
     p_heap.type = propotion;
     p_heap.size = 0;
 
-    // haha();
-    // haha1();
     int i;
     for(i=0;i<1000;i++){
         call_stub_t *temp_stub = new_io_request(0,global_app_info);
         insertToHeap(&r_heap,reserve,new_stub);
     }
-    insertToHeap(&r_heap,reserve,new_stub);
+    printf("after insert, size=%d\n",r_heap.size);
     heapify(&r_heap, reserve);
+    deleteFromHeap(&r_heap, reverse, 100);
+    printf("after delete, size=%d\n",r_heap.size);
     // for(int i=0;i<1000;)
   
 }
