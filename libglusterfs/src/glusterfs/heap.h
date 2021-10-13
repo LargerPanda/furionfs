@@ -7,7 +7,7 @@
 #define MAX_APP 100
 #define MAX_REQ 10000
  
-enum heap_name{reserve=0, propotion, limit}heap_name_t;
+typedef enum heap_name{reserve=0, propotion, limit} heap_name_t;
 
 typedef struct app_info{
     //app的三个指标值
