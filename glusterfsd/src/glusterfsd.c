@@ -2724,7 +2724,7 @@ main(int argc, char *argv[])
     }
     printf("after insert, size=%d\n",r_heap.size);
     heapify(&r_heap, reserve);
-    deleteFromHeap(&r_heap, reverse, 100);
+    deleteFromHeap(&r_heap, reserve, 100);
     printf("after delete, size=%d\n",r_heap.size);
     // for(int i=0;i<1000;)
   
