@@ -2634,14 +2634,14 @@ new_io_request(int app_index, app_info_t* app_info)
     int p_delta = (int)(REQUEST_SIZE/app_info->app_p[app_index]*1000000);
     int l_delta = (int)(REQUEST_SIZE/app_info->app_l[app_index]*1000000);
     //对tag进行赋值，超过1000000usec进位
-    new->rtag.tv_sec = app_info->last_r_of_app[app_index].tv_sec+r_delta/1000000;
-    new->rtag.tv_usec = app_info->last_r_of_app[app_index].tv_usec+r_delta%1000000;
+    new->rTag.tv_sec = app_info->last_r_of_app[app_index].tv_sec+r_delta/1000000;
+    new->rTag.tv_usec = app_info->last_r_of_app[app_index].tv_usec+r_delta%1000000;
 
-    new->ptag.tv_sec = app_info->last_p_of_app[app_index].tv_sec+p_delta/1000000;
-    new->ptag.tv_usec = app_info->last_p_of_app[app_index].tv_usec+p_delta%1000000;
+    new->pTag.tv_sec = app_info->last_p_of_app[app_index].tv_sec+p_delta/1000000;
+    new->pTag.tv_usec = app_info->last_p_of_app[app_index].tv_usec+p_delta%1000000;
 
-    new->ltag.tv_sec = app_info->last_l_of_app[app_index].tv_sec+l_delta/1000000;
-    new->ltag.tv_usec = app_info->last_l_of_app[app_index].tv_usec+l_delta%1000000;
+    new->lTag.tv_sec = app_info->last_l_of_app[app_index].tv_sec+l_delta/1000000;
+    new->lTag.tv_usec = app_info->last_l_of_app[app_index].tv_usec+l_delta%1000000;
 
     INIT_LIST_HEAD(&new->list);
     INIT_LIST_HEAD(&new->args_cbk.entries);
