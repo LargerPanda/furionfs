@@ -81,7 +81,7 @@
 #include <glusterfs/daemon.h>
 
 //QoS-hys
-#include "heap.h"
+#include <glusterfs/heap.h>
 
 
 /* using argp for command line parsing */
