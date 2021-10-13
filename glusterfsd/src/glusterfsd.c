@@ -2694,7 +2694,7 @@ main(int argc, char *argv[])
 
     call_stub_t *new_stub = new_io_request(0,global_app_info);
     if(new_stub!=NULL){
-        printf("create stub success!");
+        printf("create stub success!\n");
     }else{
         printf("fail!");
     }
@@ -2703,6 +2703,7 @@ main(int argc, char *argv[])
     heap_t r_heap;
     heap_t p_heap;
 
+    insertToHeap(&r_heap,reserve,new_stub);
     // for(int i=0;i<1000;)
   
 }
