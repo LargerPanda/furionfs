@@ -14,7 +14,7 @@ static int timevalcmp(struct timeval * t1, struct timeval * t2)
 static bool is_smaller(heap_t* heap, heap_name_t heap_name, int cur, int parent){
     switch (heap_name)
     {
-    case reverse:
+    case reserve:
         if(timevalcmp(&(heap->elements[parent]->rTag),&(heap->elements[cur]->rTag))<0){
             return true;
         }else{
@@ -45,7 +45,7 @@ static bool is_smaller(heap_t* heap, heap_name_t heap_name, int cur, int parent)
 static void update_position(call_stub_t* element, heap_name_t heap_name, int p){
     switch (heap_name)
     {
-    case reverse:
+    case reserve:
         element->position_r=p;
         break;
     case propotion:
@@ -109,11 +109,11 @@ static int siftDown(heap_t* heap, heap_name_t heap_name, int start, int end)//�
 }
 
 void heapify(heap_t* heap, heap_name_t heap_name){
-    currentSize = heap->size;
+    int currentSize = heap->size;
     int currentPos = (currentSize - 2) / 2;	//找最初调整位置:最后分支结点
     while (currentPos>=0)	//自底向上逐步扩大形成堆
     {
-        siftDowm(heap, heap_name, currentPos, currentSize - 1);	//局部自上向下下滑调整
+        siftDown(heap, heap_name, currentPos, currentSize - 1);	//局部自上向下下滑调整
         currentPos--;	//再向前换一个分支结点
     }
 }
@@ -136,7 +136,7 @@ bool insertToHeap(heap_t* heap, heap_name_t heap_name, call_stub_t* element){
 //从p的位置删除一个element
 bool deleteFromHeap(heap_t* heap, heap_name_t heap_name, int p){
     //先把最后一个元素的位置交换到位置p，再把size--
-    last_p = heap->size-1;
+    int last_p = heap->size-1;
     if(p>last_p){
         printf("out of boundary!\n");
         return false;
