@@ -2703,6 +2703,8 @@ main(int argc, char *argv[])
     heap_t r_heap;
     heap_t p_heap;
 
+    haha();
+    haha1();
     insertToHeap(&r_heap,reserve,new_stub);
     heapify(&r_heap, reserve);
     // for(int i=0;i<1000;)

@@ -1,8 +1,8 @@
 #ifndef HEAP_H
 #define HEAP_H
 
-
-#include "glusterfs/call-stub.h"
+#include <stdio.h>
+#include <glusterfs/call-stub.h>
 
 #define MAX_APP 100
 #define MAX_REQ 10000
@@ -28,6 +28,12 @@ typedef struct req_heap
     int size;
     heap_name_t type;
 }heap_t;
+
+void haha(){
+    printf("hahahaa");
+}
+
+void haha1();
 
 //向外提供堆化、插入、和删除操作
 //取元素就是简化版的删除操作

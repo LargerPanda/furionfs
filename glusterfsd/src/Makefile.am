@@ -3,13 +3,13 @@ if WITH_SERVER
 sbin_PROGRAMS += glusterfsd gf_attach
 endif
 
-glusterfsd_SOURCES = glusterfsd.c glusterfsd-mgmt.c
+glusterfsd_SOURCES = glusterfsd.c glusterfsd-mgmt.c $(top_builddir)/libglusterfs/src/heap.c
 glusterfsd_LDADD = $(top_builddir)/libglusterfs/src/libglusterfs.la \
 	$(top_builddir)/rpc/rpc-lib/src/libgfrpc.la \
 	$(top_builddir)/rpc/xdr/src/libgfxdr.la ${GF_LDADD}
 glusterfsd_LDFLAGS = $(GF_LDFLAGS) $(LIB_DL)
 
-gf_attach_SOURCES = gf_attach.c
+gf_attach_SOURCES = gf_attach.c 
 gf_attach_LDADD   = $(top_builddir)/libglusterfs/src/libglusterfs.la \
 		    $(top_builddir)/api/src/libgfapi.la \
 		    $(top_builddir)/rpc/rpc-lib/src/libgfrpc.la \
