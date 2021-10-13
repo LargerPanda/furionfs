@@ -25,7 +25,7 @@ typedef struct app_info{
 typedef struct req_heap
 {
     call_stub_t* elements[MAX_REQ];//从0开始放置
-    int size;
+    int size=0;
     heap_name_t type;
 }heap_t;
 
