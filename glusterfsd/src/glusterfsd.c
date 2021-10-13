@@ -2702,8 +2702,10 @@ main(int argc, char *argv[])
 
     heap_t r_heap;
     r_heap.type = reserve;
+    r_heap.size = 0;
     heap_t p_heap;
     p_heap.type = propotion;
+    p_heap.size = 0;
 
     // haha();
     // haha1();
