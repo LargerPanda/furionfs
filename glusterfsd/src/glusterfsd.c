@@ -2704,6 +2704,7 @@ main(int argc, char *argv[])
     heap_t p_heap;
 
     insertToHeap(&r_heap,reserve,new_stub);
+    heapify(&r_heap, reserve);
     // for(int i=0;i<1000;)
   
 }
