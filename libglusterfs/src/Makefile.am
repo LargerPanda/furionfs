@@ -21,14 +21,14 @@ libgfchangelogdir = $(includedir)/glusterfs/gfchangelog
 
 CONTRIB_BUILDDIR = $(top_builddir)/contrib
 
-libglusterfs_la_SOURCES = dict.c xlator.c logging.c \
+libglusterfs_la_SOURCES = heap.c dict.c xlator.c logging.c \
 	hashfn.c common-utils.c timer.c inode.c call-stub.c \
 	compat.c fd.c compat-errno.c event.c mem-pool.c gf-dirent.c syscall.c \
 	iobuf.c globals.c statedump.c stack.c checksum.c daemon.c timespec.c \
 	$(CONTRIBDIR)/rbtree/rb.c rbthash.c store.c latency.c \
 	graph.c syncop.c graph-print.c trie.c run.c options.c fd-lk.c \
 	circ-buff.c event-history.c gidcache.c ctx.c client_t.c event-poll.c \
-	event-epoll.c syncop-utils.c cluster-syncop.c refcount.c heap.c\
+	event-epoll.c syncop-utils.c cluster-syncop.c refcount.c \
 	$(CONTRIBDIR)/libgen/basename_r.c \
 	$(CONTRIBDIR)/libgen/dirname_r.c \
 	strfd.c parse-utils.c $(CONTRIBDIR)/mount/mntent.c \
@@ -43,7 +43,7 @@ nodist_libglusterfs_la_HEADERS = y.tab.h
 
 BUILT_SOURCES = graph.lex.c defaults.c eventtypes.h
 
-libglusterfs_la_HEADERS = glusterfs/common-utils.h glusterfs/defaults.h \
+libglusterfs_la_HEADERS = glusterfs/heap.h glusterfs/common-utils.h glusterfs/defaults.h \
 	glusterfs/default-args.h glusterfs/dict.h glusterfs/glusterfs.h \
 	glusterfs/hashfn.h glusterfs/timespec.h glusterfs/logging.h \
 	glusterfs/xlator.h glusterfs/stack.h glusterfs/timer.h glusterfs/list.h \
@@ -65,7 +65,7 @@ libglusterfs_la_HEADERS = glusterfs/common-utils.h glusterfs/defaults.h \
 	glusterfs/quota-common-utils.h glusterfs/rot-buffs.h \
 	glusterfs/compat-uuid.h glusterfs/upcall-utils.h glusterfs/throttle-tbf.h \
 	glusterfs/events.h glusterfs/atomic.h glusterfs/monitoring.h \
-	glusterfs/async.h glusterfs/glusterfs-fops.h glusterfs/heap.h
+	glusterfs/async.h glusterfs/glusterfs-fops.h 
 
 libglusterfs_ladir = $(includedir)/glusterfs
 
