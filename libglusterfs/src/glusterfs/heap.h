@@ -29,11 +29,11 @@ typedef struct req_heap
     heap_name_t type;
 }heap_t;
 
-void haha(){
-    printf("hahahaa");
-}
+// void haha(){
+//     printf("hahahaa");
+// }
 
-void haha1();
+// void haha1();
 
 //向外提供堆化、插入、和删除操作
 //取元素就是简化版的删除操作
