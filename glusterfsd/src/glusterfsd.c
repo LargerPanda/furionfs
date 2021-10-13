@@ -2643,6 +2643,16 @@ new_io_request(int app_index, app_info_t* app_info)
     new->lTag.tv_sec = app_info->last_l_of_app[app_index].tv_sec+l_delta/1000000;
     new->lTag.tv_usec = app_info->last_l_of_app[app_index].tv_usec+l_delta%1000000;
 
+    //更新上一个标签的值
+    app_info->last_r_of_app[app_index].tv_sec=new->rTag.tv_sec;
+    app_info->last_r_of_app[app_index].tv_usec=new->rTag.tv_usec;
+
+    app_info->last_p_of_app[app_index].tv_sec=new->pTag.tv_sec;
+    app_info->last_p_of_app[app_index].tv_usec=new->pTag.tv_usec;
+
+    app_info->last_l_of_app[app_index].tv_sec=new->lTag.tv_sec;
+    app_info->last_l_of_app[app_index].tv_usec=new->lTag.tv_usec;
+
     INIT_LIST_HEAD(&new->list);
     INIT_LIST_HEAD(&new->args_cbk.entries);
 out:
@@ -2709,6 +2719,11 @@ main(int argc, char *argv[])
 
     // haha();
     // haha1();
+    int i;
+    for(i=0;i<1000;i++){
+        call_stub_t *temp_stub = new_io_request(0,global_app_info);
+        insertToHeap(&r_heap,reserve,new_stub);
+    }
     insertToHeap(&r_heap,reserve,new_stub);
     heapify(&r_heap, reserve);
     // for(int i=0;i<1000;)
