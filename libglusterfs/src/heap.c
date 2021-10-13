@@ -1,4 +1,4 @@
-#include "heap.h"
+#include <glusterfs/heap.h>
 
 static int timevalcmp(struct timeval * t1, struct timeval * t2)
 {
