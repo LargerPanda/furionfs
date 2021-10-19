@@ -1,6 +1,6 @@
 #include <glusterfs/heap.h>
 
-static int timevalcmp(struct timeval * t1, struct timeval * t2)
+int timevalcmp(struct timeval * t1, struct timeval * t2)
 {
     if (t1->tv_sec == t2->tv_sec)
         return (t1->tv_usec == t2->tv_usec) ? 0 :
@@ -40,6 +40,7 @@ static bool is_smaller(heap_t* heap, heap_name_t heap_name, int cur, int parent)
         break;
     }
 } 
+
 
 //根据heap_name，更新element的在heap_name指定的heap中的位置
 static void update_position(call_stub_t* element, heap_name_t heap_name, int p){
@@ -134,7 +135,8 @@ bool insertToHeap(heap_t* heap, heap_name_t heap_name, call_stub_t* element){
 }
 
 //从p的位置删除一个element
-bool deleteFromHeap(heap_t* heap, heap_name_t heap_name, int p){
+call_stub_t* deleteFromHeap(heap_t* heap, heap_name_t heap_name, int p){
+    call_stub_t* ret = heap->elements[p];
     //先把最后一个元素的位置交换到位置p，再把size--
     int last_p = heap->size-1;
     if(p>last_p){
@@ -150,4 +152,6 @@ bool deleteFromHeap(heap_t* heap, heap_name_t heap_name, int p){
     update_position(heap->elements[p],heap_name,p);
     heap->size--;
     heapify(heap,heap_name);
+
+    return ret;
 }

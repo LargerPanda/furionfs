@@ -2634,14 +2634,20 @@ new_io_request(int app_index, app_info_t* app_info)
     int p_delta = (int)(REQUEST_SIZE/app_info->app_p[app_index]*1000000);
     int l_delta = (int)(REQUEST_SIZE/app_info->app_l[app_index]*1000000);
     //对tag进行赋值，超过1000000usec进位
-    new->rTag.tv_sec = app_info->last_r_of_app[app_index].tv_sec+r_delta/1000000;
-    new->rTag.tv_usec = app_info->last_r_of_app[app_index].tv_usec+r_delta%1000000;
+    long total_usec = app_info->last_r_of_app[app_index].tv_sec*1000000+app_info->last_r_of_app[app_index].tv_usec;
+    total_usec += r_delta;
+    new->rTag.tv_sec = total_usec/1000000;
+    new->rTag.tv_usec = total_usec%1000000;
 
-    new->pTag.tv_sec = app_info->last_p_of_app[app_index].tv_sec+p_delta/1000000;
-    new->pTag.tv_usec = app_info->last_p_of_app[app_index].tv_usec+p_delta%1000000;
+    total_usec = app_info->last_p_of_app[app_index].tv_sec*1000000+app_info->last_p_of_app[app_index].tv_usec;
+    total_usec += p_delta;
+    new->pTag.tv_sec = total_usec/1000000;
+    new->pTag.tv_usec = total_usec%1000000;
 
-    new->lTag.tv_sec = app_info->last_l_of_app[app_index].tv_sec+l_delta/1000000;
-    new->lTag.tv_usec = app_info->last_l_of_app[app_index].tv_usec+l_delta%1000000;
+    total_usec = app_info->last_l_of_app[app_index].tv_sec*1000000+app_info->last_l_of_app[app_index].tv_usec;
+    total_usec += l_delta;
+    new->lTag.tv_sec = total_usec/1000000;
+    new->lTag.tv_usec = total_usec%1000000;
 
     //更新上一个标签的值
     app_info->last_r_of_app[app_index].tv_sec=new->rTag.tv_sec;
@@ -2672,9 +2678,9 @@ app_info_t* new_app_info(){
     new->app_p[0] = 40;
     new->app_l[0] = 80;
     //app1
-    new->app_r[1] = 20;
-    new->app_p[1] = 40;
-    new->app_l[1] = 80;
+    new->app_r[1] = 40;
+    new->app_p[1] = 80;
+    new->app_l[1] = 100;
     // //app2
     // new->app_r[2] = 20;
     // new->app_b[2] = 40;
@@ -2695,6 +2701,36 @@ app_info_t* new_app_info(){
     /*******在这初始化时间戳**********/
     return new;
 }
+
+static bool is_larger(heap_name_t heap_name, call_stub_t* a, call_stub_t* b){
+    switch (heap_name)
+    {
+    case reserve:
+        if(timevalcmp(&(heap->elements[parent]->rTag),&(heap->elements[cur]->rTag))<0){
+            return true;
+        }else{
+            return false;
+        }
+        break;
+    case propotion:
+        if(timevalcmp(&(heap->elements[parent]->pTag),&(heap->elements[cur]->pTag))<0){
+            return true;
+        }else{
+            return false;
+        }
+        break;
+    case limit:
+        if(timevalcmp(&(heap->elements[parent]->lTag),&(heap->elements[cur]->lTag))<0){
+            return true;
+        }else{
+            return false;
+        }
+        break;
+    default:
+        return true;
+        break;
+    }
+} 
 
 int
 main(int argc, char *argv[])
@@ -2717,15 +2753,72 @@ main(int argc, char *argv[])
     p_heap.type = propotion;
     p_heap.size = 0;
 
+    /*测试模块*/
     int i;
-    for(i=0;i<1000;i++){
-        call_stub_t *temp_stub = new_io_request(0,global_app_info);
-        insertToHeap(&r_heap,reserve,new_stub);
+    // for(i=0;i<1000;i++){
+    //     call_stub_t *temp_stub = new_io_request(0,global_app_info);
+    //     insertToHeap(&r_heap,reserve,new_stub);
+    // }
+    // printf("after insert, size=%d\n",r_heap.size);
+    // heapify(&r_heap, reserve);
+    // deleteFromHeap(&r_heap, reserve, 100);
+    // printf("after delete, size=%d\n",r_heap.size);
+    /*测试模块*/
+    int num_ios = 10000;
+
+    for(i=num_ios;i>0;i--){//初始化reserve堆
+        int which_app = rand()%2;//随机属于哪一个应用 
+        call_stub_t *new_io = new_io_request(which_app,global_app_info);
+        insertToHeap(&r_heap,reserve,new_io);
     }
-    printf("after insert, size=%d\n",r_heap.size);
-    heapify(&r_heap, reserve);
-    deleteFromHeap(&r_heap, reserve, 100);
-    printf("after delete, size=%d\n",r_heap.size);
-    // for(int i=0;i<1000;)
-  
+    for(i=num_ios;i>0;i--){//初始化propotion堆
+        int which_app = rand()%2;//随机属于哪一个应用 
+        call_stub_t *new_io = new_io_request(which_app,global_app_info);
+        insertToHeap(&p_heap,propotion,new_io);
+    }
+
+    struct timeval start_time, end_time;
+    gettimeofday(&start_time, NULL);
+    //随机选择处理哪一个堆
+    for(i=num_ios;i>0;i--){
+        int which_heap = rand()%10;
+        if(which_heap>=0&&which_heap<=3){
+            //从reserve顶上拿一个
+            call_stub_t* top = deleteFromHeap(&r_heap, reserve, 0);
+            //得到该请求在pheap中的位置
+            int pos = top->position_p;
+            //删掉
+            top = deleteFromHeap(&p_heap, propotion, pos);
+        }else{
+            //从propotion中拿一个
+            call_stub_t* top = deleteFromHeap(&p_heap, propotion, 0);
+            //得到该请求在rheap中的位置
+            int pos = top->position_r;
+            //得到该请求属于哪个app
+            int id = top->app_index;
+            struct timeval temp_rTag = top->rTag;
+            //得到该请求的rtag
+            //删掉
+            top = deleteFromHeap(&r_heap, reserve, pos);
+            //将该app中在reserve堆中的所有请求的tag减去1/reserve
+            int r_size = r_heap->size;
+            int k;
+            for(k=0;k<r_size;k++){
+                //如果请求的id一致 并且 rTag大于被删掉的
+                if(r_heap->elements[k]->app_index==id && timevalcmp(&(r_heap->elements[k]->rTag),&temp_rTag)>0){
+                    //将tag的值减去1/r
+                    int r_delta = (int)(REQUEST_SIZE/app_info->app_r[id]*1000000);
+                    long total_usec = r_heap->elements[k]->rTag.tv_sec*1000000+r_heap->elements[k]->rTag.tv_usec;
+                    total_usec -= r_delta;
+                    r_heap->elements[k]->rTag.tv_sec = total_usec/1000000;
+                    r_heap->elements[k]->rTag.tv_usec = total_usec%1000000;
+                }
+            }
+            heapify(&r_heap, reserve);
+        }
+    }
+    gettimeofday(&end_time, NULL);
+    int time = (end_time.tv_sec-start_time.tv_sec)*1000000+end_time.tv_usec-start_time.tv_usec
+    printf("processing time: %d\n",time);
+    //所有请求处理完成
 }
