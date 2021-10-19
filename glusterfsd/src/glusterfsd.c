@@ -2807,7 +2807,7 @@ main(int argc, char *argv[])
                 //如果请求的id一致 并且 rTag大于被删掉的
                 if(r_heap.elements[k]->app_index==id && timevalcmp(&(r_heap.elements[k]->rTag),&temp_rTag)>0){
                     //将tag的值减去1/r
-                    int r_delta = (int)(REQUEST_SIZE/app_info->app_r[id]*1000000);
+                    int r_delta = (int)(REQUEST_SIZE/global_app_info->app_r[id]*1000000);
                     long total_usec = r_heap.elements[k]->rTag.tv_sec*1000000+r_heap.elements[k]->rTag.tv_usec;
                     total_usec -= r_delta;
                     r_heap.elements[k]->rTag.tv_sec = total_usec/1000000;
@@ -2818,7 +2818,7 @@ main(int argc, char *argv[])
         }
     }
     gettimeofday(&end_time, NULL);
-    int time = (end_time.tv_sec-start_time.tv_sec)*1000000+end_time.tv_usec-start_time.tv_usec
+    int time = (end_time.tv_sec-start_time.tv_sec)*1000000+end_time.tv_usec-start_time.tv_usec;
     printf("processing time: %d\n",time);
     //所有请求处理完成
 }
