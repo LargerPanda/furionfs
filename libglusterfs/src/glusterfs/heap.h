@@ -41,6 +41,6 @@ void heapify(heap_t* heap, heap_name_t heap_name);
 
 bool insertToHeap(heap_t* heap, heap_name_t heap_name, call_stub_t* element);
 
-bool deleteFromHeap(heap_t* heap, heap_name_t heap_name, int p);
+call_stub_t* deleteFromHeap(heap_t* heap, heap_name_t heap_name, int p);
 
 #endif
