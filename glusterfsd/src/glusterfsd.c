@@ -2816,6 +2816,7 @@ main(int argc, char *argv[])
     }
     gettimeofday(&end_time, NULL);
     int time = (end_time.tv_sec-start_time.tv_sec)*1000000+end_time.tv_usec-start_time.tv_usec;
-    printf("processing time: %d usec\n",time);
+    printf("total processing time: %d usec\n",time);
+    printf("each takes: %d usec\n",time/num_ios);
     //所有请求处理完成
 }
