@@ -2766,14 +2766,10 @@ main(int argc, char *argv[])
     /*测试模块*/
     int num_ios = 10000;
 
-    for(i=num_ios;i>0;i--){//初始化reserve堆
+    for(i=num_ios;i>0;i--){//初始化reserve及propotion堆
         int which_app = rand()%2;//随机属于哪一个应用 
         call_stub_t *new_io = new_io_request(which_app,global_app_info);
         insertToHeap(&r_heap,reserve,new_io);
-    }
-    for(i=num_ios;i>0;i--){//初始化propotion堆
-        int which_app = rand()%2;//随机属于哪一个应用 
-        call_stub_t *new_io = new_io_request(which_app,global_app_info);
         insertToHeap(&p_heap,propotion,new_io);
     }
 
