@@ -2702,35 +2702,35 @@ app_info_t* new_app_info(){
     return new;
 }
 
-static bool is_larger(heap_name_t heap_name, call_stub_t* a, call_stub_t* b){
-    switch (heap_name)
-    {
-    case reserve:
-        if(timevalcmp(&(a->rTag),&(b->rTag))>0){
-            return true;
-        }else{
-            return false;
-        }
-        break;
-    case propotion:
-        if(timevalcmp(&(a->pTag),&(b->pTag))>0){
-            return true;
-        }else{
-            return false;
-        }
-        break;
-    case limit:
-        if(timevalcmp(&(a->lTag),&(b->lTag))>0){
-            return true;
-        }else{
-            return false;
-        }
-        break;
-    default:
-        return true;
-        break;
-    }
-} 
+// static bool is_larger(heap_name_t heap_name, call_stub_t* a, call_stub_t* b){
+//     switch (heap_name)
+//     {
+//     case reserve:
+//         if(timevalcmp(&(a->rTag),&(b->rTag))>0){
+//             return true;
+//         }else{
+//             return false;
+//         }
+//         break;
+//     case propotion:
+//         if(timevalcmp(&(a->pTag),&(b->pTag))>0){
+//             return true;
+//         }else{
+//             return false;
+//         }
+//         break;
+//     case limit:
+//         if(timevalcmp(&(a->lTag),&(b->lTag))>0){
+//             return true;
+//         }else{
+//             return false;
+//         }
+//         break;
+//     default:
+//         return true;
+//         break;
+//     }
+// } 
 
 int
 main(int argc, char *argv[])
@@ -2801,17 +2801,17 @@ main(int argc, char *argv[])
             //删掉
             top = deleteFromHeap(&r_heap, reserve, pos);
             //将该app中在reserve堆中的所有请求的tag减去1/reserve
-            int r_size = r_heap->size;
+            int r_size = r_heap.size;
             int k;
             for(k=0;k<r_size;k++){
                 //如果请求的id一致 并且 rTag大于被删掉的
-                if(r_heap->elements[k]->app_index==id && timevalcmp(&(r_heap->elements[k]->rTag),&temp_rTag)>0){
+                if(r_heap.elements[k]->app_index==id && timevalcmp(&(r_heap.elements[k]->rTag),&temp_rTag)>0){
                     //将tag的值减去1/r
                     int r_delta = (int)(REQUEST_SIZE/app_info->app_r[id]*1000000);
-                    long total_usec = r_heap->elements[k]->rTag.tv_sec*1000000+r_heap->elements[k]->rTag.tv_usec;
+                    long total_usec = r_heap.elements[k]->rTag.tv_sec*1000000+r_heap.elements[k]->rTag.tv_usec;
                     total_usec -= r_delta;
-                    r_heap->elements[k]->rTag.tv_sec = total_usec/1000000;
-                    r_heap->elements[k]->rTag.tv_usec = total_usec%1000000;
+                    r_heap.elements[k]->rTag.tv_sec = total_usec/1000000;
+                    r_heap.elements[k]->rTag.tv_usec = total_usec%1000000;
                 }
             }
             heapify(&r_heap, reserve);
