@@ -2735,9 +2735,21 @@ app_info_t* new_app_info(){
 int
 main(int argc, char *argv[])
 {
-    if(argc!=2){
+    int num_ios = 0;
+    int num_repeat = 1000;
+    
+    if(argc==1){
         printf("wrong input parameters!\n");
-        printf("usage: glusterfs #num_io\n");
+        printf("usage: glusterfs #num_io #num_repeat(default 1000)\n");
+        return 0;
+    }else if(argc==2){
+        num_ios = atoi(argv[1]);
+    }else if(argc==3){
+        num_ios = atoi(argv[1]);
+        num_repeat = atoi(argv[2]);
+    }else{
+        printf("wrong input parameters!\n");
+        printf("usage: glusterfs #num_io #num_repeat(default 1000)\n");
         return 0;
     }
     
@@ -2770,7 +2782,7 @@ main(int argc, char *argv[])
     // deleteFromHeap(&r_heap, reserve, 100);
     // printf("after delete, size=%d\n",r_heap.size);
     /*测试模块*/
-    int num_ios = atoi(argv[1]);
+    
 
     for(i=num_ios;i>0;i--){//初始化reserve及propotion堆
         int which_app = rand()%2;//随机属于哪一个应用 
@@ -2782,7 +2794,7 @@ main(int argc, char *argv[])
     struct timeval start_time, end_time;
     gettimeofday(&start_time, NULL);
     //随机选择处理哪一个堆
-    for(i=num_ios;i>0;i--){
+    for(i=num_repeat;i>0;i--){
         printf("processing #%d\n",i);
         int which_heap = rand()%10;
         if(which_heap>=0&&which_heap<=3){
@@ -2819,10 +2831,17 @@ main(int argc, char *argv[])
             }
             heapify(&r_heap, reserve);
         }
+        
+        /*在做完一次之后，增加一个元素进去*/
+        int which_app = rand()%2;//随机属于哪一个应用 
+        call_stub_t *add_io = new_io_request(which_app,global_app_info);
+        insertToHeap(&r_heap,reserve,add_io);
+        insertToHeap(&p_heap,propotion,add_io);
+        /*在做完一次之后，增加一个元素进去*/
     }
     gettimeofday(&end_time, NULL);
     int time = (end_time.tv_sec-start_time.tv_sec)*1000000+end_time.tv_usec-start_time.tv_usec;
     printf("total processing time: %d usec\n",time);
-    printf("each takes: %d usec\n",time/num_ios);
+    printf("each takes: %d usec\n",time/num_repeat);
     //所有请求处理完成
 }
