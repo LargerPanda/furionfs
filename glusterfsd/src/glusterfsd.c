@@ -2764,7 +2764,7 @@ main(int argc, char *argv[])
     // deleteFromHeap(&r_heap, reserve, 100);
     // printf("after delete, size=%d\n",r_heap.size);
     /*测试模块*/
-    int num_ios = 10000;
+    int num_ios = atoi(argv[1]);
 
     for(i=num_ios;i>0;i--){//初始化reserve及propotion堆
         int which_app = rand()%2;//随机属于哪一个应用 
