@@ -2736,8 +2736,8 @@ int
 main(int argc, char *argv[])
 {
     if(argc!=2){
-        print("wrong input parameters!\n");
-        print("usage: glusterfs #num_io\n");
+        printf("wrong input parameters!\n");
+        printf("usage: glusterfs #num_io\n");
     }
     
     //先生成app_info，指定app的rpl标签，并且初始化时间戳
