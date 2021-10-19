@@ -2777,6 +2777,7 @@ main(int argc, char *argv[])
     gettimeofday(&start_time, NULL);
     //随机选择处理哪一个堆
     for(i=num_ios;i>0;i--){
+        printf("processing #%d\n",i);
         int which_heap = rand()%10;
         if(which_heap>=0&&which_heap<=3){
             //从reserve顶上拿一个
@@ -2815,6 +2816,6 @@ main(int argc, char *argv[])
     }
     gettimeofday(&end_time, NULL);
     int time = (end_time.tv_sec-start_time.tv_sec)*1000000+end_time.tv_usec-start_time.tv_usec;
-    printf("processing time: %d\n",time);
+    printf("processing time: %d usec\n",time);
     //所有请求处理完成
 }
