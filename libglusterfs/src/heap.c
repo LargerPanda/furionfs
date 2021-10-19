@@ -138,15 +138,16 @@ bool insertToHeap(heap_t* heap, heap_name_t heap_name, call_stub_t* element){
 call_stub_t* deleteFromHeap(heap_t* heap, heap_name_t heap_name, int p){
     call_stub_t* ret = heap->elements[p];
     //先把最后一个元素的位置交换到位置p，再把size--
+    //现在最后一个元素的索引为heap->size-1
     int last_p = heap->size-1;
     if(p>last_p){
         printf("out of boundary!\n");
-        return false;
+        return NULL;
     }
     if(p==last_p){//如果相等的话，就说明是删除最后一个元素，直接size--返回就行
         heap->size--;
-        printf("delete last element!\n");
-        return true;
+        printf("delete last element!, current size = %d\n", heap->size);
+        return ret;
     }
     heap->elements[p] = heap->elements[last_p];
     update_position(heap->elements[p],heap_name,p);
