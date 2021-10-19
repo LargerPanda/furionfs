@@ -35,6 +35,9 @@ typedef struct req_heap
 
 // void haha1();
 
+
+int timevalcmp(struct timeval * t1, struct timeval * t2);
+
 //向外提供堆化、插入、和删除操作
 //取元素就是简化版的删除操作
 void heapify(heap_t* heap, heap_name_t heap_name);

@@ -2706,21 +2706,21 @@ static bool is_larger(heap_name_t heap_name, call_stub_t* a, call_stub_t* b){
     switch (heap_name)
     {
     case reserve:
-        if(timevalcmp(&(heap->elements[parent]->rTag),&(heap->elements[cur]->rTag))<0){
+        if(timevalcmp(&(a->rTag),&(b->rTag))>0){
             return true;
         }else{
             return false;
         }
         break;
     case propotion:
-        if(timevalcmp(&(heap->elements[parent]->pTag),&(heap->elements[cur]->pTag))<0){
+        if(timevalcmp(&(a->pTag),&(b->pTag))>0){
             return true;
         }else{
             return false;
         }
         break;
     case limit:
-        if(timevalcmp(&(heap->elements[parent]->lTag),&(heap->elements[cur]->lTag))<0){
+        if(timevalcmp(&(a->lTag),&(b->lTag))>0){
             return true;
         }else{
             return false;
