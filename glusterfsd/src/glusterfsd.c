@@ -2795,42 +2795,42 @@ main(int argc, char *argv[])
     gettimeofday(&start_time, NULL);
     //随机选择处理哪一个堆
     for(i=num_repeat;i>0;i--){
-        // printf("processing #%d\n",i);
-        // int which_heap = rand()%10;
-        // if(which_heap>=0&&which_heap<=3){
-        //     //从reserve顶上拿一个
-        //     call_stub_t* top = deleteFromHeap(&r_heap, reserve, 0);
-        //     //得到该请求在pheap中的位置
-        //     int pos = top->position_p;
-        //     //删掉
-        //     top = deleteFromHeap(&p_heap, propotion, pos);
-        // }else{
-        //     //从propotion中拿一个
-        //     call_stub_t* top = deleteFromHeap(&p_heap, propotion, 0);
-        //     //得到该请求在rheap中的位置
-        //     int pos = top->position_r;
-        //     //得到该请求属于哪个app
-        //     int id = top->app_index;
-        //     struct timeval temp_rTag = top->rTag;
-        //     //得到该请求的rtag
-        //     //删掉
-        //     top = deleteFromHeap(&r_heap, reserve, pos);
-        //     //将该app中在reserve堆中的所有请求的tag减去1/reserve
-        //     int r_size = r_heap.size;
-        //     int k;
-        //     for(k=0;k<r_size;k++){
-        //         //如果请求的id一致 并且 rTag大于被删掉的
-        //         if(r_heap.elements[k]->app_index==id && timevalcmp(&(r_heap.elements[k]->rTag),&temp_rTag)>0){
-        //             //将tag的值减去1/r
-        //             int r_delta = (int)(REQUEST_SIZE/global_app_info->app_r[id]*1000000);
-        //             long total_usec = r_heap.elements[k]->rTag.tv_sec*1000000+r_heap.elements[k]->rTag.tv_usec;
-        //             total_usec -= r_delta;
-        //             r_heap.elements[k]->rTag.tv_sec = total_usec/1000000;
-        //             r_heap.elements[k]->rTag.tv_usec = total_usec%1000000;
-        //         }
-        //     }
-        //     heapify(&r_heap, reserve);
-        //}
+        //printf("processing #%d\n",i);
+        int which_heap = rand()%10;
+        if(which_heap>=0&&which_heap<=3){
+            //从reserve顶上拿一个
+            call_stub_t* top = deleteFromHeap(&r_heap, reserve, 0);
+            //得到该请求在pheap中的位置
+            int pos = top->position_p;
+            //删掉
+            top = deleteFromHeap(&p_heap, propotion, pos);
+        }else{
+            //从propotion中拿一个
+            call_stub_t* top = deleteFromHeap(&p_heap, propotion, 0);
+            //得到该请求在rheap中的位置
+            int pos = top->position_r;
+            //得到该请求属于哪个app
+            int id = top->app_index;
+            struct timeval temp_rTag = top->rTag;
+            //得到该请求的rtag
+            //删掉
+            top = deleteFromHeap(&r_heap, reserve, pos);
+            //将该app中在reserve堆中的所有请求的tag减去1/reserve
+            int r_size = r_heap.size;
+            int k;
+            for(k=0;k<r_size;k++){
+                //如果请求的id一致 并且 rTag大于被删掉的
+                if(r_heap.elements[k]->app_index==id && timevalcmp(&(r_heap.elements[k]->rTag),&temp_rTag)>0){
+                    //将tag的值减去1/r
+                    int r_delta = (int)(REQUEST_SIZE/global_app_info->app_r[id]*1000000);
+                    long total_usec = r_heap.elements[k]->rTag.tv_sec*1000000+r_heap.elements[k]->rTag.tv_usec;
+                    total_usec -= r_delta;
+                    r_heap.elements[k]->rTag.tv_sec = total_usec/1000000;
+                    r_heap.elements[k]->rTag.tv_usec = total_usec%1000000;
+                }
+            }
+            heapify(&r_heap, reserve);
+        }
         
         /*在做完一次之后，增加一个元素进去*/
         int which_app = rand()%2;//随机属于哪一个应用 
