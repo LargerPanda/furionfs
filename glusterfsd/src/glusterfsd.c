@@ -2795,16 +2795,16 @@ main(int argc, char *argv[])
     gettimeofday(&start_time, NULL);
     //随机选择处理哪一个堆
     for(i=num_repeat;i>0;i--){
-        printf("processing #%d\n",i);
-        int which_heap = rand()%10;
-        if(which_heap>=0&&which_heap<=3){
+        // printf("processing #%d\n",i);
+        // int which_heap = rand()%10;
+        // if(which_heap>=0&&which_heap<=3){
         //     //从reserve顶上拿一个
         //     call_stub_t* top = deleteFromHeap(&r_heap, reserve, 0);
         //     //得到该请求在pheap中的位置
         //     int pos = top->position_p;
         //     //删掉
         //     top = deleteFromHeap(&p_heap, propotion, pos);
-        }else{
+        // }else{
         //     //从propotion中拿一个
         //     call_stub_t* top = deleteFromHeap(&p_heap, propotion, 0);
         //     //得到该请求在rheap中的位置
