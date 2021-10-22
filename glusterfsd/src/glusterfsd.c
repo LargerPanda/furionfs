@@ -2830,7 +2830,7 @@ main(int argc, char *argv[])
         //         }
         //     }
         //     heapify(&r_heap, reserve);
-        }
+        //}
         
         /*在做完一次之后，增加一个元素进去*/
         int which_app = rand()%2;//随机属于哪一个应用 
